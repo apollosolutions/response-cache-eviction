@@ -1,0 +1,36 @@
+scalar Date
+
+enum CacheControlScope {
+  PUBLIC
+  PRIVATE
+}
+
+directive @cacheControl(
+  maxAge: Int
+  scope: CacheControlScope
+  inheritMaxAge: Boolean
+) on FIELD_DEFINITION | OBJECT | INTERFACE | UNION
+
+type Query {
+  randomDrug: Drug @cacheControl(maxAge: 5)
+  top200Drugs: [Drug] @cacheControl(maxAge: 3600)
+  drugById(id: Int!): Drug @cacheControl(maxAge: 300)
+}
+
+enum DrugSchedule {
+  C_I
+  C_II
+  C_III
+  C_IV
+  C_V
+}
+
+type Drug {
+  id: Int!
+  brandName: String
+  genericName: String
+  drugClass: String @cacheControl(scope: PRIVATE)
+  schedule: DrugSchedule
+  releasedOn: Date @cacheControl(maxAge: 5)
+}
+

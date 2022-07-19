@@ -1,0 +1,43 @@
+{
+  "name": "custom-response-cache-prefix",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon src/index.ts",
+    "generate-types": "graphql-codegen --config codegen.yml"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^2.6.2",
+    "@graphql-codegen/introspection": "^2.1.1",
+    "@graphql-codegen/typescript": "^2.5.1",
+    "@graphql-codegen/typescript-resolvers": "^2.6.6",
+    "@tsconfig/node16": "^1.0.3",
+    "@types/cli-color": "^2.0.2",
+    "@types/node": "^17.0.35",
+    "nodemon": "^2.0.16",
+    "prettier": "^2.6.2",
+    "ts-node": "^10.8.0",
+    "typescript": "^4.7.2"
+  },
+  "dependencies": {
+    "@apollo/utils.keyvadapter": "^1.1.0",
+    "@graphql-codegen/cli": "^2.6.2",
+    "@keyv/redis": "^2.3.7",
+    "@types/pg": "^8.6.5",
+    "apollo-datasource": "^3.3.2",
+    "apollo-server": "^3.10",
+    "apollo-server-plugin-base": "^3.6.1",
+    "apollo-server-plugin-response-cache": "^3.7.0",
+    "cli-color": "^2.0.3",
+    "console-table-printer": "^2.11.0",
+    "dotenv": "^16.0.1",
+    "graphql": "^16.5.0",
+    "graphql-scalars": "^1.17.0",
+    "keyv": "^4.3.2",
+    "pg": "^8.7.3"
+  },
+  "volta": {
+    "node": "16.15.1"
+  }
+}

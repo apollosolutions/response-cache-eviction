@@ -1,0 +1,15 @@
+overwrite: true
+schema: "./src/graphql/drugs.graphql"
+documents: null
+generates:
+  src/types/generated/graphql.ts:
+    config:
+      scalars:
+        Date: string
+      contextType: "../#Context"
+    plugins:
+      - "typescript"
+      - "typescript-resolvers"
+  ./src/types/graphql.schema.json:
+    plugins:
+      - "introspection"
