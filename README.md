@@ -43,7 +43,7 @@ The result of the query will be available in our local Redis cache.
 In a new terminal, shell into the running redis container
 
 ```shell
-docker exec -it custom-response-cache-prefix_redis_1 sh
+docker exec -it custom-response-cache-keys_redis_1 sh
 ```
 
 _Note^ your redis container name could be different, run `docker ps` to see your redis name or id_
