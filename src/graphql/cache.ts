@@ -2,12 +2,13 @@ import { KeyvAdapter } from '@apollo/utils.keyvadapter'
 import Keyv from 'keyv'
 import config from '../config'
 
-export default new KeyvAdapter(
-  new Keyv(config.redisUrl, {
-    namespace: 'drug-graph',
+const keyV = () => {
+  return new Keyv(config.redisUrl, {
+    namespace: config.cacheNamespace,
     adapter: 'redis',
-  }),
-  {
-    disableBatchReads: true,
-  },
-)
+  })
+}
+
+export default new KeyvAdapter(keyV(), {
+  disableBatchReads: true,
+})

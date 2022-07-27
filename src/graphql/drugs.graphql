@@ -11,13 +11,32 @@ directive @cacheControl(
   inheritMaxAge: Boolean
 ) on FIELD_DEFINITION | OBJECT | INTERFACE | UNION
 
+input AllDrugsFilter {
+  schedules: [DrugSchedule]!
+}
+
 type Query {
-  randomDrug: Drug @cacheControl(maxAge: 5)
-  top200Drugs: [Drug] @cacheControl(maxAge: 3600)
+  allDrugs(filter: AllDrugsFilter = { schedules: [NO_SCHEDULE, C_I, C_II, C_III, C_IV, C_V] } ): [Drug] @cacheControl(maxAge: 3600)
   drugById(id: Int!): Drug @cacheControl(maxAge: 300)
 }
 
+type Mutation {
+  setDrugStock(input: DrugStockInput!): DrugStockPayload
+}
+
+type DrugStockPayload {
+  drugId: Int!
+  pillCount: Int!
+  success: Boolean!
+}
+
+input DrugStockInput {
+  drugId: Int!
+  pillCount: Int!
+}
+
 enum DrugSchedule {
+  NO_SCHEDULE
   C_I
   C_II
   C_III
@@ -25,12 +44,18 @@ enum DrugSchedule {
   C_V
 }
 
+type DrugStock @cacheControl(inheritMaxAge: true) {
+  pillsInStock: Int
+  maxPillStockCount: Int
+}
+
 type Drug {
   id: Int!
   brandName: String
   genericName: String
-  drugClass: String @cacheControl(scope: PRIVATE)
+  drugClass: String
   schedule: DrugSchedule
-  releasedOn: Date @cacheControl(maxAge: 5)
+  releasedOn: Date 
+  stock: DrugStock
 }
 

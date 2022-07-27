@@ -15,7 +15,6 @@ const serverConfig: () => Config<Context> = () => {
     resolvers,
     plugins,
     cache,
-    persistedQueries: { ttl: 900 },
     context,
     dataSources,
   }

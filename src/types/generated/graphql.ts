@@ -16,6 +16,10 @@ export type Scalars = {
   Date: string;
 };
 
+export type AllDrugsFilter = {
+  schedules: Array<InputMaybe<DrugSchedule>>;
+};
+
 export enum CacheControlScope {
   Private = 'PRIVATE',
   Public = 'PUBLIC'
@@ -29,6 +33,7 @@ export type Drug = {
   id: Scalars['Int'];
   releasedOn?: Maybe<Scalars['Date']>;
   schedule?: Maybe<DrugSchedule>;
+  stock?: Maybe<DrugStock>;
 };
 
 export enum DrugSchedule {
@@ -36,19 +41,58 @@ export enum DrugSchedule {
   CIi = 'C_II',
   CIii = 'C_III',
   CIv = 'C_IV',
-  CV = 'C_V'
+  CV = 'C_V',
+  NoSchedule = 'NO_SCHEDULE'
 }
+
+export type DrugStock = {
+  __typename?: 'DrugStock';
+  maxPillStockCount?: Maybe<Scalars['Int']>;
+  pillsInStock?: Maybe<Scalars['Int']>;
+};
+
+export type DrugStockInput = {
+  drugId: Scalars['Int'];
+  pillCount: Scalars['Int'];
+};
+
+export type DrugStockPayload = {
+  __typename?: 'DrugStockPayload';
+  drugId: Scalars['Int'];
+  pillCount: Scalars['Int'];
+  success: Scalars['Boolean'];
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  setDrugStock?: Maybe<DrugStockPayload>;
+};
+
+
+export type MutationSetDrugStockArgs = {
+  input: DrugStockInput;
+};
 
 export type Query = {
   __typename?: 'Query';
+  allDrugs?: Maybe<Array<Maybe<Drug>>>;
   drugById?: Maybe<Drug>;
-  randomDrug?: Maybe<Drug>;
-  top200Drugs?: Maybe<Array<Maybe<Drug>>>;
+  drugsBySchedule?: Maybe<Array<Maybe<Drug>>>;
+};
+
+
+export type QueryAllDrugsArgs = {
+  filter?: InputMaybe<AllDrugsFilter>;
 };
 
 
 export type QueryDrugByIdArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryDrugsByScheduleArgs = {
+  input: Array<InputMaybe<DrugSchedule>>;
 };
 
 
@@ -120,22 +164,32 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  AllDrugsFilter: AllDrugsFilter;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   CacheControlScope: CacheControlScope;
   Date: ResolverTypeWrapper<Scalars['Date']>;
   Drug: ResolverTypeWrapper<Drug>;
   DrugSchedule: DrugSchedule;
+  DrugStock: ResolverTypeWrapper<DrugStock>;
+  DrugStockInput: DrugStockInput;
+  DrugStockPayload: ResolverTypeWrapper<DrugStockPayload>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  AllDrugsFilter: AllDrugsFilter;
   Boolean: Scalars['Boolean'];
   Date: Scalars['Date'];
   Drug: Drug;
+  DrugStock: DrugStock;
+  DrugStockInput: DrugStockInput;
+  DrugStockPayload: DrugStockPayload;
   Int: Scalars['Int'];
+  Mutation: {};
   Query: {};
   String: Scalars['String'];
 };
@@ -159,18 +213,39 @@ export type DrugResolvers<ContextType = Context, ParentType extends ResolversPar
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   releasedOn?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   schedule?: Resolver<Maybe<ResolversTypes['DrugSchedule']>, ParentType, ContextType>;
+  stock?: Resolver<Maybe<ResolversTypes['DrugStock']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type DrugStockResolvers<ContextType = Context, ParentType extends ResolversParentTypes['DrugStock'] = ResolversParentTypes['DrugStock']> = {
+  maxPillStockCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  pillsInStock?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type DrugStockPayloadResolvers<ContextType = Context, ParentType extends ResolversParentTypes['DrugStockPayload'] = ResolversParentTypes['DrugStockPayload']> = {
+  drugId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  pillCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  setDrugStock?: Resolver<Maybe<ResolversTypes['DrugStockPayload']>, ParentType, ContextType, RequireFields<MutationSetDrugStockArgs, 'input'>>;
+};
+
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  allDrugs?: Resolver<Maybe<Array<Maybe<ResolversTypes['Drug']>>>, ParentType, ContextType, RequireFields<QueryAllDrugsArgs, 'filter'>>;
   drugById?: Resolver<Maybe<ResolversTypes['Drug']>, ParentType, ContextType, RequireFields<QueryDrugByIdArgs, 'id'>>;
-  randomDrug?: Resolver<Maybe<ResolversTypes['Drug']>, ParentType, ContextType>;
-  top200Drugs?: Resolver<Maybe<Array<Maybe<ResolversTypes['Drug']>>>, ParentType, ContextType>;
+  drugsBySchedule?: Resolver<Maybe<Array<Maybe<ResolversTypes['Drug']>>>, ParentType, ContextType, RequireFields<QueryDrugsByScheduleArgs, 'input'>>;
 };
 
 export type Resolvers<ContextType = Context> = {
   Date?: GraphQLScalarType;
   Drug?: DrugResolvers<ContextType>;
+  DrugStock?: DrugStockResolvers<ContextType>;
+  DrugStockPayload?: DrugStockPayloadResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
 };
 

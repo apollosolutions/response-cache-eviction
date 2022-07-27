@@ -1,4 +1,5 @@
 export default {
+  cacheNamespace: process.env.CACHE_NAMESPACE || 'drug-graph',
   redisUrl: process.env.REDIS_URL || 'redis://localhost:6379',
   port: process.env.AS_PORT ? parseInt(process.env.AS_PORT) : 5252,
   postgresConfig: {
