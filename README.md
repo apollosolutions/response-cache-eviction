@@ -258,7 +258,7 @@ async deleteByPrefix(prefix: string) {
   }
 
   if (keys.length > 0) {
-    this.client.del(keys)
+    await this.client.del(keys) // This is blocking, consider handling async in production if the number of keys is large
   }
 
   return keys

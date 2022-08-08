@@ -38,7 +38,7 @@ export class RedisEvictor {
     }
 
     if (keys.length > 0) {
-      this.client.del(keys)
+      await this.client.del(keys) // This is blocking, consider handling async in productoin if the number of keys is large
     }
 
     return keys
